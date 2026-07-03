@@ -1,0 +1,31 @@
+[project]
+name = "polty-jobs"
+version = "0.1.0"
+description = "Automated Instagram digest of Korean political-sector job postings"
+requires-python = ">=3.11"
+dependencies = [
+    "requests>=2.31",
+    "beautifulsoup4>=4.12",
+    "lxml>=5.1",
+    "playwright>=1.44",
+    "jinja2>=3.1",
+    "python-dateutil>=2.9",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=8.0",
+    "pytest-mock>=3.12",
+    "responses>=0.25",
+    "ruff>=0.4",
+    "pixelmatch>=0.3",
+    "pillow>=10.0",
+]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-v --tb=short"
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"
