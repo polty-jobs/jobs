@@ -58,7 +58,7 @@ assembly_bbs  assembly_dataA  selub_local
 ## 4. Project Structure
 
 ```
-career/
+polty-jobs/
 ├── .github/workflows/
 │   ├── post.yml          # cron 스케줄 + 수동 workflow_dispatch
 │   └── test.yml          # PR/push 시 pytest
@@ -368,7 +368,7 @@ class Source(Protocol):
    - [ ] `IG_BUSINESS_ACCOUNT_ID` 조회
 
 2. **GitHub 리포 생성**
-   - 리포 이름 확정 (예: `career-jobs-ig-bot`)
+   - 리포 이름: `polty-jobs`
    - private 권장 (state.json에는 민감정보 없음, 그래도 posts/ 아카이브 사적 사용 가능)
    - `IG_ACCESS_TOKEN`, `IG_BUSINESS_ACCOUNT_ID` Secrets 등록
 
