@@ -1,0 +1,383 @@
+
+
+
+
+
+
+
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+		<meta content="text/html; charset=utf-8" http-equiv="Content-type">
+	<meta http-equiv="X-UA-Compatible" content="IE=Edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+	<link rel="stylesheet" href="/resources/css/font/font.css" media="all">
+	<link rel="stylesheet" href="/resources/css/common.css" media="all">
+	<link rel="stylesheet" href="/resources/css/layout.css" media="all">
+	<link rel="stylesheet" href="/resources/css/styForm.css" media="all">
+	<!-- vendor css-->
+	<link rel="stylesheet" href="/resources/css/vendor/slick.css" media="all">
+	<link rel="icon" href="/resources/images/favicon.ico" type="image/x-icon">
+
+	<script src="/resources/js/jquery-1.12.4.js"></script>
+	<script src="/resources/js/vendor/slick.min.js"></script>
+	<script src="/resources/js/jquery.mask.min.js"></script>
+
+	<!-- form script & css-->
+	<script src="/resources/js/vendor/jquery-ui-1.12.1.js"></script>
+	<link rel="stylesheet" href="/resources/css/vendor/jquery-ul-1.12.1.css" media="all">
+
+	<!-- layout script-->
+	<script type="text/javascript" src="/resources/js/layout.js"></script>
+	<script type="text/javascript" src="/resources/js/form.js"></script>
+	<script type="text/javascript" src="/resources/js/common.js"></script>
+	
+
+</head>
+
+<body>
+
+	
+	
+	<!-- skip navigation -->
+	<div id="skip">
+		<h2 class="hidden">Skip Navigation</h2>
+		<ul>
+		  <li><a href="#_content" onclick="document.getElementById('_content').tabIndex = -1;document.getElementById('_content').focus();return false;">본문 바로가기</a></li>
+		  <li><a href="#_nav" onclick="document.getElementById('_nav').tabIndex = -1;document.getElementById('_nav').focus();return false;">주메뉴 바로가기</a></li>
+		</ul>
+	  </div>
+	  <!--// skip navigation -->
+
+	<header>
+		<title>국회채용시스템</title>
+		
+		<script type="text/javascript">
+		$(document).ready(function(){
+			var isHttps = (location.protocol == 'https:');
+			 if(isHttps == false){
+				 //console.log('host URL : ' + "https://"+location.hostname+location.pathname);
+				 location.href="https://"+location.hostname+location.pathname;
+			} 
+		});
+		</script>
+		<div class="_wrap">
+			<div class="utilWrap">
+				<div class="login_state">
+						
+							
+									
+									<ul class="utilList">
+										<li><a href="/main/mainPage.do">home</a></li>
+										<li><a href="/member/login.do">login</a></li>
+										<li><a href="/member/makeidAccept.do">회원가입</a></li>
+										<li><a href="/main/siteMap.do">SiteMap</a></li>
+									</ul>
+							
+							
+						
+					</div>
+				</div>
+
+
+			<div id="gnbWrap">
+				<h1 id="_logo"><a href="/main/mainPage.do">국회채용시스템</a></h1>
+				<nav id="_nav">
+					<ul class="ul_1">
+						<li class="li_1">
+							<a class="a_1" href="/board/examList.do">시험정보</a>
+							<ul class="ul_2">
+								<li class="li_2">
+									<a class="a_2" href="/board/examList.do">시험공고</a>
+									<a class="a_2" style="display:none;" href="/board/examDetail.do"></a>
+								</li>
+								<li class="li_2">
+									<a class="a_2" href="/board/noticeList.do">공지사항</a>
+									<a class="a_2" style="display:none;" href="/board/noticeDetail.do"></a>
+								</li>
+								<li class="li_2">
+									<a class="a_2" href="/board/pdsList.do">자료실</a>
+									<a class="a_2" style="display:none;" href="/board/pdsDetail.do"></a>
+								</li>
+								<li class="li_2">
+									<a class="a_2" href="/board/faqList.do">자주묻는질문</a>
+									<a class="a_2" style="display:none;" href="/board/faqListDetail.do"></a>
+									<a class="a_2" style="display:none;" href="/board02/qnaList.do"></a>
+									<a class="a_2" style="display:none;" href="/board02/qnaDetail.do"></a>
+									<a class="a_2" style="display:none;" href="/board02/qnaWrite.do"></a>
+									<a class="a_2" style="display:none;" href="/board02/qnaModify.do"></a>
+								</li>
+							</ul>
+						</li>
+						<li class="li_1">
+							<a class="a_1" href="/recruit/recruitList.do">원서접수</a>
+							<ul class="ul_2">
+								<li class="li_2">
+									<a class="a_2" href="/recruit/recruitList.do">원서접수등록</a>
+									<a class="a_2" style="display:none;" href="/recruit/recruitReg.do"></a>
+									<a class="a_2" style="display:none;" href="/recruit/doRecruitReg.do"></a>
+									<a class="a_2" style="display:none;" href="/recruit/recruitRegSubject.do"></a>
+									<a class="a_2" style="display:none;" href="/recruit/recruitRegLicense.do"></a>
+									<a class="a_2" style="display:none;" href="/recruit/recruitRegLangHisEx.do"></a>
+									<a class="a_2" style="display:none;" href="/recruit/recruitRegEduCarr.do"></a>
+									<a class="a_2" style="display:none;" href="/recruit/recruitRegPayment.do"></a>
+									<a class="a_2" style="display:none;" href="/recruit/recruitRegComplt.do"></a>
+									<a class="a_2" style="display:none;" href="/recruit/doRecruitUpdateEduCarr.do"></a>
+									<a class="a_2" style="display:none;" href="/recruit/doRecruitCross.do"></a>
+								</li>
+								<li class="li_2">
+									<a class="a_2"  href="/recruit/doUsrExamList.do">원서접수내역</a>
+									<a class="a_2" style="display:none;" href="/recruit/usrExamDetail.do"></a>
+									<a class="a_2" style="display:none;" href="/recruit/doRecruitMod.do"></a>
+									<a class="a_2" style="display:none;" href="/recruit/doRecruitModSubject.do"></a>
+									<a class="a_2" style="display:none;" href="/recruit/doRecruitModLicense.do"></a>
+									<a class="a_2" style="display:none;" href="/recruit/doRecruitModLangHisEx.do"></a>
+									<a class="a_2" style="display:none;" href="/recruit/doRecruitModEduCarr.do"></a>
+									<a class="a_2" style="display:none;" href="/recruit/updateRecruitModEduCarr.do"></a>
+
+
+								</li>
+								<li class="li_2">
+									<a class="a_2" href="/recruit/doRecruitAddList.do">자격증/영어,한국사 추가등록</a>
+									<a class="a_2" style="display:none;" href="/recruit/doRecruitAddLicense.do"></a>
+									<a class="a_2" style="display:none;" href="/recruit/doRecruitAddLangHisReg.do"></a>
+								</li>
+							</ul>
+						</li>
+						<li class="li_1">
+							<a class="a_1" href="/examGuide/outline.do">시험안내</a>
+							<ul class="ul_2">
+								<li class="li_2">
+									<a class="a_2" href="/examGuide/outline.do">시험개요</a>
+								</li>
+								<li class="li_2">
+									<a class="a_2" href="/examGuide/schedule.do">예정업무</a>
+								</li>
+								<li class="li_2">
+									<a class="a_2" href="/examGuide/subject.do">시험과목</a>
+								</li>
+								<li class="li_2">
+									<a class="a_2" href="/examGuide/way.do">시험방법</a>
+								</li>
+								<li class="li_2">
+									<a class="a_2" href="/examGuide/right.do">응시자격</a>
+								</li>
+								<li class="li_2">
+									<a class="a_2" href="/examGuide/add.do">자격증</a>
+								</li>
+							</ul>
+						</li>
+						<li class="li_1">
+							<a class="a_1" href="/myinfo/examSchedule.do">나의정보</a>
+							<ul class="ul_2">
+								<li class="li_2">
+									<a class="a_2" href="/myinfo/examSchedule.do">나의시험일정</a>
+								</li>
+								<li class="li_2">
+									<a class="a_2" href="/myinfo/myScore.do">성적조회</a>
+								</li>
+								<li class="li_2">
+									<a class="a_2" href="/myinfo/myPass.do">합격증출력</a>
+								</li>
+								<li class="li_2">
+									<a class="a_2" href="/myinfo/myObjection.do">정답이의제기</a>
+									<a class="a_2" style="display:none;" href="/myinfo/myObjectionWrite.do"></a>
+									<a class="a_2" style="display:none;" href="/myinfo/myObjectionDetail.do"></a>
+									<a class="a_2" style="display:none;" href="/myinfo/myObjectionModify.do"></a>
+								</li>
+								<li class="li_2 ">
+									<a class="a_2" href="/member02/myInfo.do">개인정보수정</a>
+								</li>
+								<li class="li_2">
+									<a class="a_2" href="/member02/myIdpwSet.do">비밀번호수정</a>
+								</li>
+								<!-- 한국모바일인증테스트용 김보람 일때만 메뉴 보임-->
+								
+							</ul>
+						</li>
+					</ul>
+				</nav>
+				<a href="#none" class="menu-btn"><span class="lines"></span></a>			
+			</div>
+		</div>
+	</header>
+
+	<!--  article 넣는부분 -->
+
+	<article id="_subArticle">
+		<div class="subVisual"></div>
+		<div class="_wrap">
+			<aside>
+				<h2><!--page depth 1 title--></h2>
+				<nav id="_sideNav"><!--sideNav--></nav>
+			</aside>
+
+			<div id="_content">
+				<h3 class="pageTitle"><!--pageTitle--></h3>
+				<div class="_inner">
+					<div class="_contentArea _formArea">
+
+						<!-- Form postWriteWrap  -->
+						<div class="postView">
+							<dl>
+								<dt>제목</dt>
+								<dd>2026년도 국회사무처 관리국 한시임기제공무원 6호 채용시험 서류전형 합격자 공고</dd>
+							</dl>
+							<dl>
+								<dt>기관</dt>
+								<dd>국회사무처</dd>
+								<dt>작성일</dt>
+								<dd>2026-07-02</dd>
+								<dt>조회수</dt>
+								<dd>110</dd>
+							</dl>
+							<div class="post_text">
+								<pre>
+ 【국회사무처공고 제2026-96호】&lt;br /&gt;
+&lt;br /&gt;
+&lt;br /&gt;
+2026년도 국회사무처 관리국 한시임기제공무원 6호 채용시험 서류전형 합격자를 다음과 같이 공고합니다.&lt;br /&gt;
+&lt;br /&gt;
+ 
+&lt;div style=&quot;text-align:center&quot;&gt;2026년 7월 2일&lt;br /&gt;
+&lt;br /&gt;
+&lt;br /&gt;
+&lt;strong&gt;국 회 사 무 총 장&lt;/strong&gt;&lt;/div&gt;
+
+								</pre>
+							</div>
+							<dl class="_fileArea">
+								<dt>
+									첨부파일
+								</dt>
+
+								<dd>
+									<ul class="fileList">
+										
+
+											<li><a href="#none" onClick="javascript:fUsrFileDown('board/exam/20260702/90BA06C477B34509B9BC10B807FE47A4.hwp','[2026-96] 2026년도 국회사무처 관리국 한시임기제공무원 6호 채용시험 서류전형 합격자 공고.hwp')"title="파일 다운로드">[2026-96] 2026년도 국회사무처 관리국 한시임기제공무원 6호 채용시험 서류전형 합격자 공고.hwp</a></li>
+											
+										
+									</ul>
+								</dd>
+								<!-- 첨부파일이 없을때
+								<dd>
+									추가된 첨부파일이 없습니다.
+								</dd> -->
+							</dl>
+
+
+						</div><!-- End postWriteWrap -->
+						<input type="hidden" id="mod_dt" name="mod_dt" value="20260702"/>
+						<div class="btnWrap alignR">
+							<div class="floatR">
+								
+									
+									
+										<a href="javascript:history.back();"  class="_btn _blue">목록</a>
+									
+								
+							</div>
+						</div>
+					</div><!-- End _contentArea _formArea -->
+				</div><!-- End _inner -->
+			</div><!-- End _content -->
+		</div><!-- End _wrap -->
+	</article>
+
+	
+<!-- Nethru Tag Manager -->
+<script>(function(f,d,k,h){var b;var a=m()+"ver="+c(d);g();function e(){var o=document.getElementsByTagName(f)[0];var n=document.createElement(f);n.async=true;n.charset="utf-8";n.src=a;o.parentNode.insertBefore(n,o)}function m(){return window.location.protocol=="https:"?"https://tag.assembly.go.kr:9443/static/00002/install.js?":"https://tag.assembly.go.kr:9443/static/00002/install.js?"}function c(n){var o=new Date().getTime();var p=n*1000*60;return n>0?Math.floor(o/p)*p:o}function g(){var n=l();if(!n){return false}n.open("GET",a,true);n.withCredentials=h;n.send(null);n.onload=function(){j();e()};n.onerror=n.onabort=function(){j()};i(function(){n.abort()},k)}function l(){var q;var o=[function(){return new XDomainRequest()},function(){return new XMLHttpRequest()},function(){return new ActiveXObject("Msxml2.XMLHTTP")},function(){return new ActiveXObject("Msxml3.XMLHTTP")},function(){return new ActiveXObject("Microsoft.XMLHTTP")}];for(var n=0;n<o.length;n++){try{q=o[n]()}catch(p){continue}break}return q}function i(o,n){b=setTimeout(o,n)}function j(){if(b){clearTimeout(b);b=null}}})("script",60,/*{{timeout}}*/2000,/*{{withCredentials}}*/false);</script>
+<!-- End Nethru Tag Manager -->
+
+		<footer id="footer">
+		<div class="_wrap">
+			<img class="f_logo" src="/resources/images/footer_logo.jpg" alt="국회채용시스템">
+			<div class="footer_info">
+				<address>(우)07233 서울시 영등포구 의사당대로 1(여의도동)</address>
+				<p class="copy">Copyrights (C) 2020 NATIONAL ASSEMBLY SECRETARIAT. ALL rights reserved.</p>
+				<a href="/main/privacy.do" class="f_link">개인정보처리방침</a>
+			</div>
+		</div>
+	</footer>
+</body>
+</html>
+
+<!-- 파일 다운로드 START-->
+<form name="frm_down" method="post" action="/board/fileDown.do" >
+ <input type=hidden name="sys_file_nm"   value="">
+ <input type=hidden name="org_file_nm"    value="">
+</form>
+<iframe id="fileDownFrame" name="fileDownFrame"></iframe>
+<script>
+
+
+//파일 다운로드 함수
+function fUsrFileDown(sysfilename, orgfilename) {
+  frm_down.sys_file_nm.value = sysfilename;
+  frm_down.org_file_nm.value = orgfilename;
+  frm_down.target = "fileDownFrame";
+  frm_down.submit();
+}
+// function fUsrFileDown(sysfilename, orgfilename) {
+// 		var data = new Object();
+// 		data.sys_file_nm = sysfilename;
+// 		data.org_file_nm = orgfilename;
+
+// 		$.ajax({
+// 			url : "/board/fileDown.do",
+// 			type : 'post',
+// 			data : data,
+// 			success : function(result) {
+
+// 				console.log(result);
+// // 				if (result == "fail") {
+// // 					alert("시스템 오류입니다. 관리자에게 문의해 주세요.");
+// // 				} else {
+
+// // 					checkUnload = false;
+// // 					$("#brdi_no").val(result);
+// // 					console.log(result);
+
+// // 					var form = document.detailPage;
+// // 					form.submit();
+// // 				}
+// 			},
+// 			error : function(request, status, error) {
+// 				console.log("code = " + request.status + " message = "
+// 						+ request.responseText + " error = " + error); // 실패 시 처리
+// 			}
+// 		});
+// }
+
+$(document).ready(function() {
+	var post = $("div.post_text pre").html();
+	
+	// 20230726 수정
+	//var date = $("div.postView").find("dl").eq(1).find("dd").eq(1).text().split('-').join('');
+	var date = $("#mod_dt").val();
+	
+	if (date >= 20230330) {
+		var parser = new DOMParser();	
+
+		var text = parser.parseFromString(post, 'text/html').documentElement.textContent;
+		
+		var postDiv = $("<div></div>");
+
+		postDiv.html(text);
+		
+		$("div.post_text").html(postDiv.html());
+	}
+});
+</script>
+
+
+
+
+
+
+
+
+
+
