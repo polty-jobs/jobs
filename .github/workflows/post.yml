@@ -1,0 +1,115 @@
+name: post
+
+on:
+  schedule:
+    - cron: "0 1 * * *"   # KST 10:00
+    - cron: "0 9 * * *"   # KST 18:00
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: "Skip Instagram upload / state commit"
+        type: boolean
+        default: false
+
+permissions:
+  contents: write
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    concurrency:
+      group: post
+      cancel-in-progress: false
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+          fetch-depth: 0
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+
+      - name: Install deps
+        run: |
+          pip install -r requirements.txt
+          python -m playwright install --with-deps chromium
+
+      - name: Configure git
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+      # Phase 1: fetch, dedupe, render. Produces pending.json + posts/*.png (if any new).
+      - name: Render
+        env:
+          IG_HANDLE: ${{ vars.IG_HANDLE || 'polty.jobs' }}
+        run: |
+          python -m src.main render \
+            --state state.json --posts-dir posts --pending pending.json
+
+      - name: Inspect pending
+        id: pending
+        run: |
+          if [ ! -s pending.json ]; then
+            echo "has_pending=false" >> $GITHUB_OUTPUT
+            exit 0
+          fi
+          NEW_COUNT=$(jq '.new | length' pending.json)
+          PNG=$(jq -r '.png // empty' pending.json)
+          if [ "$NEW_COUNT" = "0" ] || [ -z "$PNG" ]; then
+            echo "has_pending=false" >> $GITHUB_OUTPUT
+          else
+            echo "has_pending=true"  >> $GITHUB_OUTPUT
+            echo "png=$PNG"          >> $GITHUB_OUTPUT
+          fi
+
+      - name: Commit bootstrap state
+        if: steps.pending.outputs.has_pending == 'false'
+        run: |
+          if ! git diff --quiet state.json 2>/dev/null; then
+            git add state.json
+            git commit -m "state: bootstrap ($(date -u +%FT%TZ))"
+            for i in 1 2 3; do
+              if git push; then exit 0; fi
+              git pull --rebase
+            done
+            exit 1
+          fi
+
+      - name: Commit image
+        if: steps.pending.outputs.has_pending == 'true'
+        run: |
+          git add "posts/${{ steps.pending.outputs.png }}"
+          git commit -m "post: image ${{ steps.pending.outputs.png }}"
+          for i in 1 2 3; do
+            if git push; then exit 0; fi
+            git pull --rebase
+          done
+          exit 1
+
+      # Phase 2: publish to Instagram + update state.
+      - name: Publish to Instagram
+        if: steps.pending.outputs.has_pending == 'true' && github.event.inputs.dry_run != 'true'
+        env:
+          IG_ACCESS_TOKEN: ${{ secrets.IG_ACCESS_TOKEN }}
+          IG_BUSINESS_ACCOUNT_ID: ${{ secrets.IG_BUSINESS_ACCOUNT_ID }}
+        run: |
+          RAW_BASE="https://raw.githubusercontent.com/${{ github.repository }}/main/posts"
+          python -m src.main publish \
+            --pending pending.json --state state.json \
+            --raw-url-base "$RAW_BASE"
+
+      - name: Commit state
+        if: steps.pending.outputs.has_pending == 'true' && github.event.inputs.dry_run != 'true'
+        run: |
+          if ! git diff --quiet state.json; then
+            git add state.json
+            git commit -m "state: mark items seen ($(date -u +%FT%TZ))"
+            for i in 1 2 3; do
+              if git push; then exit 0; fi
+              git pull --rebase
+            done
+            exit 1
+          fi
