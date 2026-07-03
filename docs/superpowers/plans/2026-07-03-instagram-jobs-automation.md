@@ -38,7 +38,7 @@
 
 ```toml
 [project]
-name = "career-ig-bot"
+name = "polty-jobs"
 version = "0.1.0"
 description = "Automated Instagram digest of political sector jobs"
 requires-python = ">=3.11"
@@ -93,7 +93,7 @@ IG_BUSINESS_ACCOUNT_ID=178414...
 
 # Optional: repo owner/name used to build raw URL (auto-detected from git in CI)
 # GIT_REPO_OWNER=hayechoi
-# GIT_REPO_NAME=career
+# GIT_REPO_NAME=polty-jobs
 ```
 
 - [ ] **Step 4: Create empty package/test dirs**
@@ -1168,7 +1168,7 @@ def test_html_contains_both_categories_when_both_have_items():
     items = [_item("국회", "1", org="○○○의원실", title="비서 채용"),
              _item("지방의회", "2", org="서울시의회", title="정책보좌관")]
     html = render_digest_html(items, session_label="AM 10시",
-                              date_kst="2026-07-03", ig_handle="assembly_jobs")
+                              date_kst="2026-07-03", ig_handle="polty.jobs")
     assert "국회" in html and "지방의회" in html
     assert "비서 채용" in html and "정책보좌관" in html
 
@@ -1176,7 +1176,7 @@ def test_html_contains_both_categories_when_both_have_items():
 def test_html_omits_empty_category_section():
     items = [_item("국회", "1")]
     html = render_digest_html(items, session_label="AM 10시",
-                              date_kst="2026-07-03", ig_handle="assembly_jobs")
+                              date_kst="2026-07-03", ig_handle="polty.jobs")
     # cat-label 국회 present, 지방의회 label not
     assert '지방의회</div>' not in html
     assert '국회</div>' in html
@@ -1903,7 +1903,7 @@ def _cli() -> int:
             pending_path=Path(args.pending),
             session_label=make_session_label(now),
             date_kst=now.strftime("%Y-%m-%d"),
-            ig_handle=env("IG_HANDLE", "assembly_jobs"),
+            ig_handle=env("IG_HANDLE", "polty.jobs"),
         )
     if args.cmd == "publish":
         return cmd_publish(
@@ -2042,7 +2042,7 @@ jobs:
       # Phase 1: fetch, dedupe, render. Produces pending.json with PNG filename.
       - name: Render
         env:
-          IG_HANDLE: ${{ vars.IG_HANDLE || 'assembly_jobs' }}
+          IG_HANDLE: ${{ vars.IG_HANDLE || 'polty.jobs' }}
         run: |
           python -m src.main render \
             --state state.json --posts-dir posts --pending pending.json
@@ -2136,7 +2136,7 @@ git commit -m "ci: add scheduled post workflow (KST 10:00 / 18:00)"
 - [ ] **Step 1: Write `README.md`**
 
 ```markdown
-# career-ig-bot
+# polty-jobs
 
 3개 공공/정치 채용 사이트에서 새 공고를 수집해서 매일 KST 10시·18시에 인스타그램에 다이제스트 형태로 자동 업로드하는 봇.
 

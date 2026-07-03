@@ -382,7 +382,7 @@ class Source(Protocol):
 
 ## 13. Open Questions / Deferred
 
-- ~~**인스타 handle 확정**~~: `assembly_jobs`로 확정 (2026-07-03)
+- ~~**인스타 handle 확정**~~: `polty.jobs`로 확정 (2026-07-03). GitHub 리포는 `polty-jobs`
 - **Long-lived token 자동 갱신**: 60일마다 갱신 필요. 초기 스코프는 수동 갱신, 이후 워크플로에 갱신 스텝 추가 검토
 - **셀럽어스 상세 필드**: 실제 페이지 렌더 후 selector 확정 (구현 초반 태스크)
 - **폰트 로드 방식**: Actions에서 Pretendard 설치 최적 경로 (system font vs CDN vs commit vendored) — 실측 뒤 확정
