@@ -25,6 +25,9 @@ dev = [
 [tool.pytest.ini_options]
 testpaths = ["tests"]
 addopts = "-v --tb=short"
+markers = [
+    "slow: tests that launch Playwright/Chromium (slower, needs browser install)",
+]
 
 [tool.ruff]
 line-length = 100

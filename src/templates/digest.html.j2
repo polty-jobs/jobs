@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<style>{{ css }}</style>
+</head>
+<body>
+<div class="page sz-{{ size_class }}">
+  <header>
+    <div class="date">{{ date_kst }} · {{ session_label }}</div>
+    <h1>오늘의 새 공고{% if items_국회 %} · 국회 {{ items_국회|length }}{% endif %}{% if items_지방의회 %} · 지방의회 {{ items_지방의회|length }}{% endif %}</h1>
+  </header>
+
+  {% if items_국회 %}
+  <section class="cat">
+    <div class="cat-label">국회</div>
+    <ul>
+      {% for it in items_국회 %}
+      <li>· {{ it.org }} · {{ it.title }}{% if it.deadline %} · ~{{ it.deadline.month }}/{{ it.deadline.day }}{% endif %}</li>
+      {% endfor %}
+      {% if truncated_국회 %}<li class="more">· 외 {{ truncated_국회 }}건</li>{% endif %}
+    </ul>
+  </section>
+  {% endif %}
+
+  {% if items_지방의회 %}
+  <section class="cat">
+    <div class="cat-label">지방의회</div>
+    <ul>
+      {% for it in items_지방의회 %}
+      <li>· {{ it.org }} · {{ it.title }}{% if it.deadline %} · ~{{ it.deadline.month }}/{{ it.deadline.day }}{% endif %}</li>
+      {% endfor %}
+      {% if truncated_지방의회 %}<li class="more">· 외 {{ truncated_지방의회 }}건</li>{% endif %}
+    </ul>
+  </section>
+  {% endif %}
+
+  <footer class="brand">@{{ ig_handle }}</footer>
+</div>
+</body>
+</html>
