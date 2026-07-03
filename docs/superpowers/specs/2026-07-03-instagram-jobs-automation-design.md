@@ -161,6 +161,7 @@ class Source(Protocol):
   - `category` = `"지방의회"` 상수
 - **robots.txt**: 구현 시작 시 확인. 명시적 disallow면 셀럽어스 소스 제외 재검토
 - **rate limit**: 요청 간격 1초, 카테고리 탭 클릭 후 렌더 완료 대기(최대 15초)
+- **Selector 실패 계약**: "지방의회" 탭 · "진행중" 필터 · 리스트 컨테이너 selector가 못 찾히면 → **예외 발생 (fetch 실패로 처리)**. Section 10 규칙에 따라 warn 로그 + 다른 2개 소스는 진행
 
 ## 7. State Management & Dedup
 
@@ -191,7 +192,7 @@ class Source(Protocol):
 5. state.json 프룬 + 업데이트 → 커밋 & push (2번째 커밋)
 
 **실패 시맨틱스:**
-- 4번 실패 → 3번의 이미지 커밋은 남지만, state.json 미갱신 → 다음 실행에서 재시도 (이미지는 rerun 시 새로 생성됨, 남은 파일은 나중에 수동 정리)
+- 4번 실패 → 3번의 이미지 커밋은 남지만, state.json 미갱신 → 다음 실행에서 새로 렌더 & 새 파일명으로 커밋. **orphan PNG는 아카이브로 유지 (자동 정리 스코프 밖)**. 파일명이 `{YYYY-MM-DD-HHmm}.png`라 겹칠 위험 없음
 - 5번 실패 → 인스타는 이미 게시됨. 커밋 재시도 3회(pull-rebase). 그래도 실패면 알림 → 수동 병합
 - Push 충돌 (누군가 리포에 다른 커밋): `git pull --rebase` 후 재시도
 
@@ -241,6 +242,7 @@ class Source(Protocol):
 - `size_class` = total 아이템 수 기준 4단계: `1` (≤10), `2` (11-20), `3` (21-30), `4` (31+)
 - CSS에서 클래스별 폰트/줄간격 정의
 - 렌더 후 페이지 JS로 overflow 감지 → 감지 시 `sz-4` 강제
+- **`sz-4`에서도 overflow면 (매우 드물지만 40+/day 시나리오)**: 각 카테고리 리스트를 뒤에서부터 잘라내고 마지막에 `· 외 N건` 표기. "전부 표기" 원칙의 안전장치. 캡션에는 원 카운트 유지
 
 ### 컬러/스타일
 - 배경: `#1e3a5f` (다크 네이비)
@@ -290,12 +292,18 @@ class Source(Protocol):
 ### Caption 템플릿
 ```
 [일일 채용 브리핑 · {session_label}]
-국회 {n_국회}건 · 지방의회 {n_지방의회}건
+{summary_line}
 
 원문 링크는 프로필의 링크트리 참고
 
 #국회채용 #의원실채용 #지방의회채용 #공공채용
 ```
+
+- `summary_line` = 새 공고가 있는 카테고리만 join (이미지 섹션 렌더 룰과 매치)
+  - 국회 3, 지방의회 2 → `"국회 3건 · 지방의회 2건"`
+  - 국회 3, 지방의회 0 → `"국회 3건"` (지방의회 언급 생략)
+  - 지방의회 2, 국회 0 → `"지방의회 2건"`
+  - 둘 다 0 → 포스트 자체가 발생 안 함 (Section 3의 "0건 스킵")
 
 ### Secrets (GitHub Actions Secrets)
 - `IG_ACCESS_TOKEN` — Instagram Graph API long-lived token
@@ -337,7 +345,11 @@ class Source(Protocol):
 - `--fixture-mode`: fixture HTML만 소스로 사용해서 이미지 회귀 확인
 
 ### Snapshot
-- `tests/test_render_snapshot.py`: 3~5개 시나리오 (0건, 1건씩, 15건씩, 30건 편중, deadline 결측 혼재) → 렌더된 PNG를 `tests/snapshots/*.png`와 SHA256 비교. 폰트/스타일 변화 회귀 방지
+- `tests/test_render_snapshot.py`: 3~5개 시나리오 (0건, 1건씩, 15건씩, 30건 편중, deadline 결측 혼재)
+- **PNG SHA256 비교는 하지 않음** (Chromium/폰트 버전에 지나치게 취약해 false-positive 다발)
+- 대신 두 가지 검증 조합:
+  1. **HTML 스냅샷**: 최종 렌더된 HTML을 `tests/snapshots/*.html`과 diff (구조/텍스트 회귀 감지)
+  2. **PNG perceptual diff**: `pixelmatch` (또는 유사 라이브러리)로 `tests/snapshots/*.png`와 threshold 비교 (기본 0.05 정도) — 폰트 렌더 미세차는 통과, 레이아웃 붕괴는 감지
 
 ### CI (`.github/workflows/test.yml`)
 - push/PR 시: pytest 전체
