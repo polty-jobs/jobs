@@ -92,8 +92,8 @@ IG_BUSINESS_ACCOUNT_ID=178414...
 # SLACK_WEBHOOK_URL=https://hooks.slack.com/services/...
 
 # Optional: repo owner/name used to build raw URL (auto-detected from git in CI)
-# GIT_REPO_OWNER=hayechoi
-# GIT_REPO_NAME=polty-jobs
+# GIT_REPO_OWNER=polty-jobs
+# GIT_REPO_NAME=jobs
 ```
 
 - [ ] **Step 4: Create empty package/test dirs**
