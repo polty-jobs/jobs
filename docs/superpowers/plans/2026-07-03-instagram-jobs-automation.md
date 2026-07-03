@@ -1168,7 +1168,7 @@ def test_html_contains_both_categories_when_both_have_items():
     items = [_item("국회", "1", org="○○○의원실", title="비서 채용"),
              _item("지방의회", "2", org="서울시의회", title="정책보좌관")]
     html = render_digest_html(items, session_label="AM 10시",
-                              date_kst="2026-07-03", ig_handle="career_jobs")
+                              date_kst="2026-07-03", ig_handle="assembly_jobs")
     assert "국회" in html and "지방의회" in html
     assert "비서 채용" in html and "정책보좌관" in html
 
@@ -1176,7 +1176,7 @@ def test_html_contains_both_categories_when_both_have_items():
 def test_html_omits_empty_category_section():
     items = [_item("국회", "1")]
     html = render_digest_html(items, session_label="AM 10시",
-                              date_kst="2026-07-03", ig_handle="career_jobs")
+                              date_kst="2026-07-03", ig_handle="assembly_jobs")
     # cat-label 국회 present, 지방의회 label not
     assert '지방의회</div>' not in html
     assert '국회</div>' in html
@@ -1903,7 +1903,7 @@ def _cli() -> int:
             pending_path=Path(args.pending),
             session_label=make_session_label(now),
             date_kst=now.strftime("%Y-%m-%d"),
-            ig_handle=env("IG_HANDLE", "career_jobs"),
+            ig_handle=env("IG_HANDLE", "assembly_jobs"),
         )
     if args.cmd == "publish":
         return cmd_publish(
@@ -2042,7 +2042,7 @@ jobs:
       # Phase 1: fetch, dedupe, render. Produces pending.json with PNG filename.
       - name: Render
         env:
-          IG_HANDLE: ${{ vars.IG_HANDLE || 'career_jobs' }}
+          IG_HANDLE: ${{ vars.IG_HANDLE || 'assembly_jobs' }}
         run: |
           python -m src.main render \
             --state state.json --posts-dir posts --pending pending.json
