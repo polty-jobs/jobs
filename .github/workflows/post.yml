@@ -68,7 +68,8 @@ jobs:
       - name: Commit bootstrap state
         if: steps.pending.outputs.has_pending == 'false'
         run: |
-          if ! git diff --quiet state.json 2>/dev/null; then
+          # Check both new (untracked) and modified state.json.
+          if [ -n "$(git status --porcelain state.json 2>/dev/null)" ]; then
             git add state.json
             git commit -m "state: bootstrap ($(date -u +%FT%TZ))"
             for i in 1 2 3; do
@@ -104,7 +105,7 @@ jobs:
       - name: Commit state
         if: steps.pending.outputs.has_pending == 'true' && github.event.inputs.dry_run != 'true'
         run: |
-          if ! git diff --quiet state.json; then
+          if [ -n "$(git status --porcelain state.json 2>/dev/null)" ]; then
             git add state.json
             git commit -m "state: mark items seen ($(date -u +%FT%TZ))"
             for i in 1 2 3; do

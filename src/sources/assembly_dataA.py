@@ -37,7 +37,7 @@ class AssemblyDataASource:
                 LIST_URL,
                 params=params,
                 headers={"User-Agent": USER_AGENT},
-                timeout=15,
+                timeout=(30, 60),  # (connect, read) — GitHub Actions runners hit assembly.go.kr slowly
             )
             resp.raise_for_status()
             page_items = self._parse_list(resp.content)
@@ -53,7 +53,7 @@ class AssemblyDataASource:
             resp = requests.get(
                 item.url,
                 headers={"User-Agent": USER_AGENT},
-                timeout=15,
+                timeout=(30, 60),
             )
             resp.raise_for_status()
             deadline = self._parse_detail_deadline(resp.content)

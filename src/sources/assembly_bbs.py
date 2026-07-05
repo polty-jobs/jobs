@@ -36,7 +36,7 @@ class AssemblyBbsSource:
                 LIST_URL,
                 params=params,
                 headers={"User-Agent": USER_AGENT},
-                timeout=15,
+                timeout=(30, 60),  # (connect, read) — GitHub Actions runners hit assembly.go.kr slowly
             )
             resp.raise_for_status()
             page_items = self._parse(resp.content)
