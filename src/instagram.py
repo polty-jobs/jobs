@@ -1,5 +1,8 @@
 from __future__ import annotations
+import hashlib
+import hmac
 import time
+
 import requests
 
 
@@ -15,12 +18,14 @@ class InstagramClient:
         business_id: str,
         access_token: str,
         *,
+        app_secret: str | None = None,
         poll_interval_seconds: float = 2.0,
         poll_timeout_seconds: float = 60.0,
         retry_wait_seconds: float = 5.0,
     ) -> None:
         self.business_id = business_id
         self.access_token = access_token
+        self.app_secret = app_secret
         self.poll_interval = poll_interval_seconds
         self.poll_timeout = poll_timeout_seconds
         self.retry_wait = retry_wait_seconds
@@ -30,15 +35,21 @@ class InstagramClient:
         self._wait_container_ready(creation_id)
         return self._publish(creation_id)
 
+    def _params(self, **extra: str) -> dict[str, str]:
+        params = {"access_token": self.access_token, **extra}
+        if self.app_secret:
+            params["appsecret_proof"] = hmac.new(
+                self.app_secret.encode("utf-8"),
+                self.access_token.encode("utf-8"),
+                hashlib.sha256,
+            ).hexdigest()
+        return params
+
     def _create_container(self, image_url: str, caption: str) -> str:
         def call():
             return requests.post(
                 f"{self.API}/{self.business_id}/media",
-                params={
-                    "image_url": image_url,
-                    "caption": caption,
-                    "access_token": self.access_token,
-                },
+                params=self._params(image_url=image_url, caption=caption),
                 timeout=30,
             )
         resp = self._with_retry(call, "create container")
@@ -49,7 +60,7 @@ class InstagramClient:
         while time.monotonic() < deadline:
             r = requests.get(
                 f"{self.API}/{creation_id}",
-                params={"fields": "status_code", "access_token": self.access_token},
+                params=self._params(fields="status_code"),
                 timeout=30,
             )
             r.raise_for_status()
@@ -65,7 +76,7 @@ class InstagramClient:
         def call():
             return requests.post(
                 f"{self.API}/{self.business_id}/media_publish",
-                params={"creation_id": creation_id, "access_token": self.access_token},
+                params=self._params(creation_id=creation_id),
                 timeout=30,
             )
         resp = self._with_retry(call, "publish")

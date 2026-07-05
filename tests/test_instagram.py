@@ -1,6 +1,51 @@
+import hashlib
+import hmac
+from urllib.parse import parse_qs, urlparse
+
 import pytest
 import responses
 from src.instagram import InstagramClient, InstagramError
+
+
+@responses.activate
+def test_appsecret_proof_added_when_secret_provided():
+    responses.add(responses.POST,
+                  "https://graph.facebook.com/v19.0/BIZ_ID/media",
+                  json={"id": "C1"}, status=200)
+    responses.add(responses.GET,
+                  "https://graph.facebook.com/v19.0/C1",
+                  json={"status_code": "FINISHED"}, status=200)
+    responses.add(responses.POST,
+                  "https://graph.facebook.com/v19.0/BIZ_ID/media_publish",
+                  json={"id": "P1"}, status=200)
+
+    c = InstagramClient(business_id="BIZ_ID", access_token="TOKEN", app_secret="SECRET")
+    c.publish_image("https://x/img.png", "hi")
+
+    expected = hmac.new(b"SECRET", b"TOKEN", hashlib.sha256).hexdigest()
+    for call in responses.calls:
+        q = parse_qs(urlparse(call.request.url).query)
+        assert q.get("appsecret_proof") == [expected], f"missing proof on {call.request.url}"
+
+
+@responses.activate
+def test_appsecret_proof_omitted_when_no_secret():
+    responses.add(responses.POST,
+                  "https://graph.facebook.com/v19.0/BIZ_ID/media",
+                  json={"id": "C1"}, status=200)
+    responses.add(responses.GET,
+                  "https://graph.facebook.com/v19.0/C1",
+                  json={"status_code": "FINISHED"}, status=200)
+    responses.add(responses.POST,
+                  "https://graph.facebook.com/v19.0/BIZ_ID/media_publish",
+                  json={"id": "P1"}, status=200)
+
+    c = InstagramClient(business_id="BIZ_ID", access_token="TOKEN")
+    c.publish_image("https://x/img.png", "hi")
+
+    for call in responses.calls:
+        q = parse_qs(urlparse(call.request.url).query)
+        assert "appsecret_proof" not in q
 
 
 @responses.activate

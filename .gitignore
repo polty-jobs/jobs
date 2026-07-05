@@ -1,6 +1,9 @@
 # Superpowers brainstorm ephemera
 .superpowers/
 
+# Local reference material (screenshots, notes) — never publish
+REF/
+
 # Python
 __pycache__/
 *.py[cod]

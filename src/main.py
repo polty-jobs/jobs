@@ -185,7 +185,11 @@ def cmd_publish(
     raw_url = f"{raw_url_base.rstrip('/')}/{png_name}"
     caption = _caption(session_label, counts)
 
-    ig = InstagramClient(business_id=ig_business_id, access_token=ig_access_token)
+    ig = InstagramClient(
+        business_id=ig_business_id,
+        access_token=ig_access_token,
+        app_secret=env("IG_APP_SECRET") or None,
+    )
     try:
         post_id = ig.publish_image(image_url=raw_url, caption=caption)
         log.info("IG published: %s", post_id)
