@@ -3,7 +3,7 @@ import re
 import time
 from dataclasses import replace
 from datetime import date, datetime, timezone
-from urllib.parse import parse_qs, urljoin, urlparse
+from urllib.parse import parse_qs, urlparse
 
 import requests
 from bs4 import BeautifulSoup
