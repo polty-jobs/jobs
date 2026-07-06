@@ -90,18 +90,13 @@ jobs:
           done
           exit 1
 
-      # Phase 2: publish to Instagram + update state.
-      - name: Publish to Instagram
+      # Phase 2: mark items as seen so they don't re-appear in the next digest.
+      # No Instagram upload — image is left in posts/ for manual upload.
+      - name: Mark items as seen
         if: steps.pending.outputs.has_pending == 'true' && github.event.inputs.dry_run != 'true'
-        env:
-          IG_ACCESS_TOKEN: ${{ secrets.IG_ACCESS_TOKEN }}
-          IG_BUSINESS_ACCOUNT_ID: ${{ secrets.IG_BUSINESS_ACCOUNT_ID }}
-          IG_APP_SECRET: ${{ secrets.IG_APP_SECRET }}
         run: |
-          RAW_BASE="https://raw.githubusercontent.com/${{ github.repository }}/main/posts"
-          python -m src.main publish \
-            --pending pending.json --state state.json \
-            --raw-url-base "$RAW_BASE"
+          python -m src.main mark-seen \
+            --pending pending.json --state state.json
 
       - name: Commit state
         if: steps.pending.outputs.has_pending == 'true' && github.event.inputs.dry_run != 'true'

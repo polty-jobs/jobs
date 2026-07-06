@@ -158,6 +158,35 @@ def cmd_render(
     return 0
 
 
+def cmd_mark_seen(*, pending_path: Path, state_path: Path) -> int:
+    """Read pending.json → update state.json → delete pending.json.
+
+    Used when Instagram publishing is disabled and images are committed
+    to the repo for manual upload. No IG API calls.
+    """
+    logging.basicConfig(level=logging.INFO, format="%(levelname)s %(name)s: %(message)s")
+
+    if not pending_path.exists():
+        log.info("no pending.json — nothing to mark")
+        return 0
+    data = json.loads(pending_path.read_text(encoding="utf-8"))
+    new_dicts = data.get("new") or []
+    if not new_dicts:
+        log.info("pending.json empty — nothing to mark")
+        pending_path.unlink(missing_ok=True)
+        return 0
+
+    new_items = [_item_from_dict(d) for d in new_dicts]
+    state = State.load(state_path)
+    state.record(new_items)
+    state.last_run_at = kst_now()
+    state.save(state_path)
+    log.info("state updated with %d new items (manual upload mode)", len(new_items))
+
+    pending_path.unlink(missing_ok=True)
+    return 0
+
+
 def cmd_publish(
     *,
     pending_path: Path,
@@ -222,6 +251,10 @@ def _cli() -> int:
     pub.add_argument("--state", default="state.json")
     pub.add_argument("--raw-url-base", required=True)
 
+    mark = sub.add_parser("mark-seen")
+    mark.add_argument("--pending", default="pending.json")
+    mark.add_argument("--state", default="state.json")
+
     args = p.parse_args()
 
     if args.cmd == "render":
@@ -241,6 +274,11 @@ def _cli() -> int:
             ig_business_id=env("IG_BUSINESS_ACCOUNT_ID", required=True),
             ig_access_token=env("IG_ACCESS_TOKEN", required=True),
             raw_url_base=args.raw_url_base,
+        )
+    if args.cmd == "mark-seen":
+        return cmd_mark_seen(
+            pending_path=Path(args.pending),
+            state_path=Path(args.state),
         )
     return 2
 

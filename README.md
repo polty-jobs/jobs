@@ -1,6 +1,8 @@
 # polty-jobs
 
-3개 채용 사이트에서 새 공고를 수집해서 매일 KST 10시·18시에 인스타그램 [@polty.jobs](https://instagram.com/polty.jobs)에 다이제스트로 자동 업로드하는 봇.
+3개 채용 사이트에서 새 공고를 수집해서 매일 KST 10시·18시에 다이제스트 이미지(1080×1350 PNG)를 `posts/` 폴더에 자동 저장하는 봇. 저장된 이미지는 [@polty.jobs](https://instagram.com/polty.jobs)에 **수동 업로드**합니다.
+
+인스타그램 자동 게시(Graph API)는 코드로 준비돼 있으나(`main.py publish`) 현재 워크플로에서는 비활성. 나중에 활성화하려면 `.github/workflows/post.yml`의 `Mark items as seen` 스텝을 `Publish to Instagram`으로 교체하면 됩니다.
 
 ## 소스
 - **국회 의원실채용** — assembly.go.kr B0000038 (`assembly_bbs`)
